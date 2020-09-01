@@ -1,0 +1,108 @@
+#include<iostream>
+using namespace std;
+
+int **mark;
+int *full;
+int N, K, M;
+typedef struct score {
+	int name;
+	int mark;
+	int perfect;
+}score;
+void initial()
+{
+	cin >> N >> K >> M;
+	mark = new int*[N + 1];
+	full = new int[K + 1];
+	for (int i = 1; i <=K; i++)
+	{
+		cin >> full[i];
+	}
+	
+	for (int i = 1; i <= N; i++)
+	{
+		mark[i] = new int[K + 1];
+	}
+	for (int i = 1; i <= N; i++)
+	{
+		for (int j = 1; j <= K; j++)
+			mark[i][j] = -100;
+	}
+	for (int i = 0; i < M; i++)
+	{
+		int position, score, problem;
+		cin >> position >> problem >> score;
+		if (score == -1)
+			score = 0;
+		if (score>mark[position][problem])
+			mark[position][problem] = score;
+		
+	}
+}
+
+int main()
+{
+	initial();
+	score* List=new score[N+1];
+	for (int i = 1; i <= N; i++)
+	{
+		List[i].name = i;
+		
+		for (int j = 1; j <= K; j++)
+		{
+			if (j == 1)
+			{
+				List[i].mark = 0;
+				List[i].perfect = 0;
+			}
+			if (mark[i][j] >= 0)
+			{
+				List[i].mark += mark[i][j];
+				if (mark[i][j] == full[j])
+					List[i].perfect++;
+			}
+		}
+		int hey;
+		score temp = List[i];
+		for (hey = i; (List[hey - 1].mark <temp.mark&&hey > 1)||(List[hey - 1].mark == temp.mark&&List[hey - 1].perfect < temp.perfect); hey--)
+		{
+			List[hey] = List[hey - 1];
+		}
+          List[hey] = temp;
+	}
+	{
+		int inirank = 0;
+		for (int i = 1; i <= N; i++)
+		{
+			
+			if (List[i].mark > 0)
+			{
+				if (i != 1)
+				cout << endl;
+				if (i != 1 && List[i].mark == List[i - 1].mark)
+				{
+					if(!inirank)//若还没有值，就更新
+					  inirank = i - 1;
+					cout << inirank << ' ';
+				}
+				else
+				{
+					inirank = 0;
+					cout << i << ' ';
+				}
+				printf("%05d %d ", List[i].name, List[i].mark);
+				int position = List[i].name;
+				for (int i = 1; i <= K; i++)
+				{
+					if (mark[position][i] == -100)
+						cout << '-';
+					else
+					cout << mark[position][i];
+					if (i != K)
+						cout << ' ';
+				}
+			}
+		}
+	}
+	
+}
