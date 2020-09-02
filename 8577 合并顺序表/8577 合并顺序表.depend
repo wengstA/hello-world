@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1584706688 source:c:\users\11643\desktop\程序\c语言\学校\数据结构\8577 合并顺序表\main.cpp
+	<iostream>
+	<stdio.h>
+	<malloc.h>
+
